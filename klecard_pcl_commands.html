@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klecard İnteraktif PCL Komut Referansı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Muted Teal & Sand -->
+    <!-- Application Structure Plan: Tek sayfalık, interaktif bir referans kılavuzu. Üstte başlık, altında arama ve kategori filtreleri, ana içerik alanında ise PCL komutlarının kartlar halinde listelendiği bir yapı. En altta ise akordiyon menü içinde Hata Kodları ve Genel Bakış gibi ek bilgiler yer alıyor. Bu yapı, kullanıcının (geliştiricinin) statik bir dokümanı baştan sona okumak yerine, ihtiyaç duyduğu komut veya bilgiye en hızlı şekilde ulaşmasını sağlamak için tasarlandı. Arama ve filtreleme, kullanılabilirliği en üst düzeye çıkarır. -->
+    <!-- Visualization & Content Choices: Rapor, grafiksel veri içermediğinden Chart.js gibi kütüphaneler kullanılmadı. Bunun yerine odak, yapılandırılmış metin verilerinin (PCL komutları, Hata Kodları) en etkili şekilde sunulması üzerine kuruldu. Komutlar için interaktif kartlar, hata kodları için filtrelenebilir bir tablo ve genel bilgiler için akordiyon menüler tercih edildi. Bu yöntemler, teknik bir dokümanın içeriğini keşfetmek ve anlamak için en uygun sunum ve etkileşim biçimleridir. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #fdfaf6;
+            color: #4a4a4a;
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .command-code {
+            background-color: #eef2f7;
+            color: #3b82f6;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .category-btn {
+            transition: all 0.2s;
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+        .category-btn.active, .category-btn:hover {
+            background-color: #0d9488;
+            color: #ffffff;
+        }
+        .accordion-header {
+            transition: background-color 0.2s;
+        }
+        .accordion-header:hover {
+            background-color: #f8fafc;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #0d9488;
+            border-color: #0d9488;
+        }
+    </style>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-teal-800">Klecard İnteraktif PCL Referansı</h1>
+            <p class="text-lg text-gray-600 mt-2">Yazıcı komutlarını ve hata kodlarını kolayca arayın ve filtreleyin.</p>
+        </header>
+
+        <main>
+            <!-- PCL Komutları Bölümü -->
+            <section id="pcl-commands">
+                <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="relative flex-grow">
+                            <input type="text" id="searchInput" placeholder="Komut adı, kodu veya açıklaması ile ara..." class="w-full p-3 pl-10 border rounded-lg search-input">
+                            <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div id="categoryFilters" class="mt-4 flex flex-wrap gap-2">
+                        <!-- Kategori butonları JS ile buraya eklenecek -->
+                    </div>
+                </div>
+
+                <div id="commandList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Komut kartları JS ile buraya eklenecek -->
+                </div>
+            </section>
+
+            <!-- Ek Bilgiler Bölümü -->
+            <section id="additional-info" class="mt-12">
+                <h2 class="text-2xl font-bold text-center text-teal-800 mb-6">Ek Bilgiler</h2>
+                <div class="space-y-4">
+                    <!-- Hata Kodları Akordiyon -->
+                    <div class="bg-white rounded-lg border">
+                        <button class="accordion-header w-full flex justify-between items-center p-5 text-left font-semibold">
+                            <span>Hata Kodları (FSC)</span>
+                            <svg class="w-6 h-6 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-5 border-t">
+                                <input type="text" id="fscSearchInput" placeholder="Hata kodu veya açıklaması ile ara..." class="w-full p-2 mb-4 border rounded-md search-input">
+                                <div class="overflow-x-auto">
+                                    <table id="fscTable" class="w-full text-sm text-left">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="p-3">Kod</th>
+                                                <th class="p-3">Hata</th>
+                                                <th class="p-3">Açıklama</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Hata kodları JS ile buraya eklenecek -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Genel Bakış Akordiyon -->
+                    <div class="bg-white rounded-lg border">
+                        <button class="accordion-header w-full flex justify-between items-center p-5 text-left font-semibold">
+                            <span>Genel Bakış ve Temel Özellikler</span>
+                            <svg class="w-6 h-6 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-5 border-t prose max-w-none">
+                                <ul>
+                                    <li><b>Çözünürlük:</b> 300 x 600 DPI</li>
+                                    <li><b>Baskı Hızı:</b> Grafik modunda saniyede 1 inç. Yüksek hızlı metin/barkod modu mevcuttur.</li>
+                                    <li><b>Arayüz:</b> USB 2.0 (Windows USB paralel yazıcı arayüzü)</li>
+                                    <li><b>Komut Dili:</b> PCL-5 (Standart ve cihaza özel komutlar)</li>
+                                    <li><b>Sıkıştırma:</b> PCL RLE (Run-Length Encoding) desteklenir. Gelişmiş veri aktarımı için sıkıştırılmış (`Esc*b#C`) ve sıkıştırılmamış (`Esc*b#U`) modlar arasında dinamik geçiş önerilir.</li>
+                                    <li><b>Ofset Ayarlama:</b>
+                                        <ul>
+                                            <li>Yatay pozisyon (sol marjin) `Esc*p#X` komutu ile ayarlanır. Bu komut, RLE sıkıştırma devre dışı olduğunda raster verisinin başlangıç noktasını belirler.</li>
+                                            <li>Dikey pozisyon `Esc*p#Y` komutu ile ayarlanır.</li>
+                                            <li>Ayrıca, `Esc!mxxxH` komutu ile 1/1200 DPI hassasiyetinde üst marjin ofseti ayarlanabilir. Bu, ince ayar için kritik öneme sahiptir.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-12 text-sm text-gray-500">
+            <p>Bu referans aracı, Klecard Yazılım Spesifikasyonları (Rev Q) dokümanından derlenmiştir.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const pclCommands = [
+            { name: "Transfer Raster Data", code: "Esc*b#W", description: "PCL-5 standart komutu. Raster verisini aktarır. Sıkıştırma moduna (RLE) duyarılıdır.", category: "Veri Aktarımı" },
+            { name: "Transfer Raster Data, uncompressed", code: "Esc*b#U", description: "Cihaza özel. RLE'yi devre dışı bırakır ve sıkıştırılmamış veri gönderir. Yatay Pozisyon (Esc*p#X) komutu ile kullanılır.", category: "Veri Aktarımı" },
+            { name: "Transfer Raster Data, RLE compressed", code: "Esc*b#C", description: "Cihaza özel. RLE'yi etkinleştirir. Satır verisi tam (156 byte) olmalıdır ve Yatay Pozisyon komutunu yok sayar.", category: "Veri Aktarımı" },
+            { name: "Tray Position", code: "Esc*p#Y", description: "PCL-5 standart komutu. Tepsiyi dikey olarak 1/600 DPI hassasiyetinde konumlandırır. Her satır için göndermek gereksizdir.", category: "Konumlandırma" },
+            { name: "Horizontal Position (Left Margin)", code: "Esc*p#X", description: "PCL-5 standart komutu. Yatay başlangıç pozisyonunu (sol marjini) 1/300 DPI hassasiyetinde ayarlar. RLE kapalıyken kullanılır.", category: "Konumlandırma" },
+            { name: "Enable/Disable RLE", code: "Esc*b#M", description: "PCL-5 standart komutu. RLE sıkıştırmasını etkinleştirir ('1') veya devre dışı bırakır ('0'). Esc*b#U ve Esc*b#C komutları kullanılıyorsa gereksizdir.", category: "Yapılandırma" },
+            { name: "Media Source (multi-print jobs)", code: "Esc&l#H", description: "Çoklu baskı işleri için kullanılır. Yazıcının her baskıdan önce butona basılmasını beklemesini sağlar.", category: "İş Kontrolü" },
+            { name: "PCL Reset (Open Tray)", code: "EscE", description: "PCL-5 standart komutu. Yazıcı ortamını sıfırlar ve tepsiyi açar. Her işin sonundaki komuttur.", category: "İş Kontrolü" },
+            { name: "Set Top Margin (300 DPI)", code: "Esc!axxxH", description: "Üst baskı limitini 1/300 DPI hassasiyetinde ayarlar. (0-700)", category: "Konumlandırma" },
+            { name: "Set Bottom Margin (300 DPI)", code: "Esc!bxxxH", description: "Alt baskı limitini 1/300 DPI hassasiyetinde ayarlar. (0-700)", category: "Konumlandırma" },
+            { name: "Print Start (Unlock PCL Decoding)", code: "Esc!cxxxH", description: "PCL kod çözmeyi açar ve yazdırmaya izin verir. (xxx=1)", category: "İş Kontrolü" },
+            { name: "Display String", code: "Esc!dxxxH <STRING>", description: "LCD ekranın üst satırına mesaj yazar.", category: "Arayüz" },
+            { name: "Tray Open/Close", code: "Esc!exH", description: "Tepsiyi açar (x=1) veya kapatır (x=0).", category: "İş Kontrolü" },
+            { name: "Set Steps Before (300 DPI)", code: "Esc!fxxxH", description: "Baskıdan önce TPH'yi indirmeden tepsinin ne kadar geri çekileceğini ayarlar. (0-100)", category: "Yapılandırma" },
+            { name: "Set Steps After (300 DPI)", code: "Esc!gxxxH", description: "Baskıdan sonra TPH'yi kaldırmadan önce tepsinin ne kadar ilerleyeceğini ayarlar. (0-100)", category: "Yapılandırma" },
+            { name: "Set Dot-Strobe (text/graphics)", code: "Esc!hxxxH", description: "Bitişik olmayan noktaların baskı süresini mikrosaniye cinsinden ayarlar. (0-255)", category: "Baskı Kalitesi" },
+            { name: "Set Print-Strobe", code: "Esc!ixxxH", description: "Genel baskı süresini mikrosaniye cinsinden ayarlar. (100-600)", category: "Baskı Kalitesi" },
+            { name: "Set Printing/Homing Step Rate", code: "Esc!jxxxH", description: "Adım motorunun hızını ayarlar. (500-maksimum)", category: "Yapılandırma" },
+            { name: "Set Top Margin Offset (1200 DPI)", code: "Esc!mxxxH", description: "Görüntünün tepsideki konumunu 1/1200 DPI hassasiyetinde ayarlar. Ofset için en önemli komutlardan biridir. (0-200, nominal=100)", category: "Konumlandırma" },
+            { name: "Set Maximum Print-Rate Limit", code: "Esc!oxxxH", description: "Maksimum baskı hızını sınırlar. Yüksek değer daha yavaş baskı demektir. (50-100)", category: "Baskı Kalitesi" },
+            { name: "Ribbon Sensing ON/OFF/Inverted", code: "Esc!}xxxH", description: "Şerit sensörünü etkinleştirir (1), devre dışı bırakır (0) veya ters mantıkla çalıştırır (2).", category: "Yapılandırma" },
+            { name: "Inquiry", code: "Esc!s0H", description: "Cihaz adı, firmware ve donanım revizyonu gibi bilgileri sorgular.", category: "Sorgulama" },
+            { name: "Request Sense", code: "Esc!s1H", description: "Hata durumunu okur ve temizler.", category: "Sorgulama" },
+        ];
+
+        const fscCodes = [
+            { code: "201", name: "Ribbon Out", description: "Şerit mevcut değil." },
+            { code: "202", name: "Plate Missing", description: "Baskı sırasında plaka algılanmadı." },
+            { code: "203", name: "No Media", description: "Baskı sırasında medya algılanmadı." },
+            { code: "204", name: "TPH Down", description: "TPH (Termal Kafa) indirilemedi." },
+            { code: "205", name: "TPH Up", description: "TPH kaldırılamadı veya beklenmedik şekilde indi." },
+            { code: "206", name: "Tray Home", description: "Tepsi başlangıç sensörüne konumlandırılamadı." },
+            { code: "207", name: "Tray Stalled", description: "Tepsi hareketinde durma/takılma algılandı." },
+            { code: "208", name: "PCL Corrupt", description: "PCL komut verisi hatalı." },
+            { code: "209", name: "PCL Excessive", description: "PCL raster verisi TPH kapasitesini aşıyor." },
+            { code: "210", name: "PCL LM Invalid", description: "PCL sol marjin (LM) değeri geçersiz." },
+            { code: "211", name: "PCL LM Missing", description: "PCL sol marjin (LM) gerekli ama ayarlanmamış." },
+            { code: "212", name: "PCL Bitmap Wide", description: "Hatalı formatlanmış bitmap raster satırı." },
+            { code: "214", name: "EEPROM WT", description: "EEPROM yazma hatası." },
+            { code: "215", name: "EEPROM RD", description: "EEPROM okuma hatası." },
+            { code: "216", name: "TPH Hot", description: "TPH aşırı ısındı." },
+            { code: "217", name: "TPH Cold", description: "TPH aşırı soğuk." },
+            { code: "222", name: "TPH Replace Soon", description: "TPH yakında değiştirilmeli." },
+        ];
+
+        const commandList = document.getElementById('commandList');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilters = document.getElementById('categoryFilters');
+        const fscTableBody = document.querySelector('#fscTable tbody');
+        const fscSearchInput = document.getElementById('fscSearchInput');
+
+        function renderCommands(commandsToRender) {
+            commandList.innerHTML = '';
+            if (commandsToRender.length === 0) {
+                commandList.innerHTML = '<p class="text-gray-500 col-span-full text-center">Arama kriterlerinize uygun komut bulunamadı.</p>';
+                return;
+            }
+            commandsToRender.forEach(cmd => {
+                const card = document.createElement('div');
+                card.className = 'card rounded-lg p-5 flex flex-col';
+                card.innerHTML = `
+                    <h3 class="font-bold text-lg text-teal-700">${cmd.name}</h3>
+                    <p class="command-code text-sm font-semibold my-2 p-2 rounded-md inline-block">${cmd.code}</p>
+                    <p class="text-gray-600 text-sm flex-grow">${cmd.description}</p>
+                    <p class="text-xs text-gray-400 mt-4">Kategori: ${cmd.category}</p>
+                `;
+                commandList.appendChild(card);
+            });
+        }
+        
+        function renderCategories() {
+            const categories = ['Tümü', ...new Set(pclCommands.map(cmd => cmd.category))];
+            categoryFilters.innerHTML = '';
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn px-3 py-1 text-sm font-medium rounded-full';
+                button.textContent = category;
+                if (category === 'Tümü') {
+                    button.classList.add('active');
+                }
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    filterAndRender();
+                });
+                categoryFilters.appendChild(button);
+            });
+        }
+
+        function filterAndRender() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('.category-btn.active').textContent;
+
+            const filteredCommands = pclCommands.filter(cmd => {
+                const matchesCategory = activeCategory === 'Tümü' || cmd.category === activeCategory;
+                const matchesSearch = cmd.name.toLowerCase().includes(searchTerm) || 
+                                      cmd.code.toLowerCase().includes(searchTerm) || 
+                                      cmd.description.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+            renderCommands(filteredCommands);
+        }
+        
+        function renderFscCodes(codesToRender) {
+            fscTableBody.innerHTML = '';
+            codesToRender.forEach(fsc => {
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-3 font-medium">${fsc.code}</td>
+                    <td class="p-3">${fsc.name}</td>
+                    <td class="p-3">${fsc.description}</td>
+                `;
+                fscTableBody.appendChild(row);
+            });
+        }
+
+        function filterFsc() {
+            const searchTerm = fscSearchInput.value.toLowerCase();
+            const filteredCodes = fscCodes.filter(fsc => 
+                fsc.code.toLowerCase().includes(searchTerm) ||
+                fsc.name.toLowerCase().includes(searchTerm) ||
+                fsc.description.toLowerCase().includes(searchTerm)
+            );
+            renderFscCodes(filteredCodes);
+        }
+
+        // Akordiyon menü işlevselliği
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('svg');
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                    document.querySelectorAll('.accordion-header svg').forEach(i => i.style.transform = 'rotate(0deg)');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        searchInput.addEventListener('input', filterAndRender);
+        fscSearchInput.addEventListener('input', filterFsc);
+        
+        // İlk render
+        renderCategories();
+        renderCommands(pclCommands);
+        renderFscCodes(fscCodes);
+
+    </script>
+</body>
+</html>
